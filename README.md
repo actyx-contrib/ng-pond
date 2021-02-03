@@ -2,7 +2,7 @@
 
 # ng-Pond
 
-Use the Actyx Pond framework integrated as service in your angular application. Expand your toolchain with the ActyxPondService to observe fish al over your application and speed up your UI projects and write distributed apps in a couple of hours.
+Use the Actyx Pond framework integrated as service in your angular application. Expand your toolchain with the `ActyxPondService` to observe fish all over your application and speed up your UI projects and write distributed apps in a couple of hours.
 
 ## 📦 Installation
 
@@ -14,7 +14,7 @@ ng-pond is available as a npm package.
 
 ### 🌊 ActyxPondService
 
-Add the `ActyxPondService` to your root module as singleton instance to keep the advantage of the pond internal fish caching  .
+Add the `ActyxPondService` to your root module as singleton instance and keep the advantage of the pond's internal caching.
 
 #### 📖 Example:
 
@@ -35,7 +35,7 @@ export class AppModule {}
 
 ### 🐟 Use the pond api
 
-Use the simple pond api in your components as with callbacks or with rxjs observables. This will give you the opportunity to modify your fish states in the code or use `async` pipelines to build reactive and simple user interfaces.
+Use the simple pond api in your components as with callbacks or with rxjs observables. This will give you the opportunity to use your fish states in the code or use `async` pipelines to build reactive and state of the art user interfaces.
 
 #### 📖 Example:
 
@@ -58,11 +58,9 @@ export class AppComponent {
   machine$: Observable<State>
   connectivity$: Observable<ConnectivityStatus>
 
-  constructor(private pondService: ActyxPondService) {}
-
-  ngOnInit() {
-    this.machine$ = pondService.observe$(MachineFish.of('Machine1'))
-    this.connectivity$ = pondService.getNodeConnectivity$()
+  constructor(private pondService: ActyxPondService) {
+    this.machine$ = this.pondService.observe$(MachineFish.of('Machine1'))
+    this.connectivity$ = this.pondService.getNodeConnectivity$()
   }
 
   async start() {
@@ -87,8 +85,6 @@ File: `app.component.html`
   <h2>Connectivity: {{connectivity.status | json}}</h2>
 </div>
 <div *ngIf="machine$ | async as machine; else loading">
-  <button *ngIf="machine.state==='stopped'" (click)="start()">start</button>
-  <button *ngIf="machine.state==='started'" (click)="stop()">stop</button>
   <div>
     <h2>Machine {{machine.machineId}}</h2>
     <dl>
@@ -96,6 +92,8 @@ File: `app.component.html`
       <dd>{{machine.state}}</dd>
     </dl>
   </div>
+  <button *ngIf="machine.state==='stopped'" (click)="start()">start</button>
+  <button *ngIf="machine.state==='started'" (click)="stop()">stop</button>
 </div>
 <ng-template #loading>Loading machine data...</ng-template>
 ```

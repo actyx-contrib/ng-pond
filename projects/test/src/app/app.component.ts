@@ -13,8 +13,8 @@ export class AppComponent {
   connectivity$: Observable<ConnectivityStatus>
 
   constructor(private pondService: ActyxPondService) {
-    this.machine$ = pondService.observe$(MachineFish.of('Machine1'))
-    this.connectivity$ = pondService.getNodeConnectivity$()
+    this.machine$ = this.pondService.observe$(MachineFish.of('Machine1'))
+    this.connectivity$ = this.pondService.getNodeConnectivity$()
   }
 
   async start() {

@@ -3,8 +3,6 @@
   <h2>Connectivity: {{connectivity.status | json}}</h2>
 </div>
 <div *ngIf="machine$ | async as machine; else loading">
-  <button *ngIf="machine.state==='stopped'" (click)="start()">start</button>
-  <button *ngIf="machine.state==='started'" (click)="stop()">stop</button>
   <div>
     <h2>Machine {{machine.machineId}}</h2>
     <dl>
@@ -12,5 +10,7 @@
       <dd>{{machine.state}}</dd>
     </dl>
   </div>
+  <button *ngIf="machine.state==='stopped'" (click)="start()">start</button>
+  <button *ngIf="machine.state==='started'" (click)="stop()">stop</button>
 </div>
 <ng-template #loading>Loading machine data...</ng-template>
