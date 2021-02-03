@@ -1,3 +1,5 @@
+<img width="130px" src="https://raw.githubusercontent.com/actyx-contrib/ng-pond/master/icon.png?token=AATHWQJJGUJUOPPC35QA75TADMW4Y">
+
 # ng-Pond
 
 Use the Actyx Pond framework integrated as service in your angular application. Expand your toolchain with the ActyxPondService to observe fish al over your application and speed up your UI projects and write distributed apps in a couple of hours.
