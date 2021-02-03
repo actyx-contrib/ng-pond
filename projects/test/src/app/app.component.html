@@ -1,0 +1,16 @@
+<h1>Angular - Actyx-Pond - Machine control</h1>
+<div *ngIf="connectivity$ | async as connectivity">
+  <h2>Connectivity: {{connectivity.status | json}}</h2>
+</div>
+<div *ngIf="machine$ | async as machine; else loading">
+  <button *ngIf="machine.state==='stopped'" (click)="start()">start</button>
+  <button *ngIf="machine.state==='started'" (click)="stop()">stop</button>
+  <div>
+    <h2>Machine {{machine.machineId}}</h2>
+    <dl>
+      <dt>state:</dt>
+      <dd>{{machine.state}}</dd>
+    </dl>
+  </div>
+</div>
+<ng-template #loading>Loading machine data...</ng-template>

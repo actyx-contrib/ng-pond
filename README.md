@@ -1,27 +1,98 @@
-# MyWorkspace
+<img width="130px" src="https://raw.githubusercontent.com/actyx-contrib/ng-pond/master/icon.png?token=AATHWQIC5RWS62GY3OINH3C645MHQ">
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.4.
+# ng-Pond
+Use the Actyx Pond framework integrated as service in your angular application. Expand your toolchain with the ActyxPondService to observe fish al over your application and speed up your UI projects and write distributed apps in a couple of hours.
 
-## Development server
+## 📦 Installation
+ng-pond is available as a npm package.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+npm install @actyx-contrib/ng-pond
 
-## Code scaffolding
+## 📖 Documentation and detailed examples
+You can access the full API documentation and related examples by visiting: https://actyx-contrib.github.io/react-pond
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+You will find detailed examples here. They can be executed running e.g. `npm run example:chatRoom'.
 
-## Build
+## 🤓 Quick start
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### 🌊 ActyxPondService
 
-## Running unit tests
+Add the `ActyxPondService` to your root module as singleton instance to keep the advantage of the pond internal fish caching  .
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+#### 📖 Example:
 
-## Running end-to-end tests
+```typescript
+import { AppComponent } from './app.component';
+import { ActyxPondService } from '@actyx-contrib/ng-pond'
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  providers: [ActyxPondService],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
 
-## Further help
+### 🐟 Use the pond api
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Use the simple pond api in your components as with callbacks or with rxjs observables. This will give you the opportunity to modify your fish states in the code or use `async` pipelines to build reactive and simple user interfaces.
+
+#### 📖 Example:
+
+##### Logic:
+
+```typescript
+import { Component } from '@angular/core';
+import { ActyxPondService } from '../../../../dist/ng-pond'
+import { MachineFish, State } from '../fish/MachineFish';
+import { Observable } from 'rxjs';
+import { ConnectivityStatus } from '@actyx/pond';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  machine$: Observable<State>
+  connectivity$: Observable<ConnectivityStatus>
+
+  constructor(private pondService: ActyxPondService) {}
+
+  ngOnInit() {
+    this.machine$ = pondService.observe$(MachineFish.of('Machine1'))
+    this.connectivity$ = pondService.getNodeConnectivity$()
+  }
+
+  async start() {
+    const pond = await this.pondService.getPond()
+    MachineFish.emitProdStartedEvent(pond, 'Machine1', 'order1')
+  }
+
+  async stop() {
+    const pond = await this.pondService.getPond()
+    MachineFish.emitProdStoppedEvent(pond, 'Machine1', 'order1')
+  }
+}
+```
+
+##### Template:
+
+```html
+<h1>Angular - Actyx-Pond - Machine control</h1>
+<div *ngIf="connectivity$ | async as connectivity">
+  <h2>Connectivity: {{connectivity.status | json}}</h2>
+</div>
+<div *ngIf="machine$ | async as machine; else loading">
+  <button *ngIf="machine.type==='stopped'" (click)="start()">start</button>
+  <button *ngIf="machine.type==='started'" (click)="stop()">stop</button>
+  <div>
+    <h2>Machine {{machine.machineId}}</h2>
+    <dl>
+      <dt>state:</dt>
+      <dd>{{machine.state}}</dd>
+    </dl>
+  </div>
+</div>
+<ng-template #loading>Loading machine data...</ng-template>
+```
