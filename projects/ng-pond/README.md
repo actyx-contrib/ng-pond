@@ -1,4 +1,4 @@
-<img width="130px" src="https://raw.githubusercontent.com/actyx-contrib/ng-pond/master/icon.png?token=AATHWQJJGUJUOPPC35QA75TADMW4Y">
+<img width="130px" src="https://raw.githubusercontent.com/actyx-contrib/ng-pond/master/icon.png?token=AATHWQO47MDKOSROJRW3VYDADVZEW">
 
 # ng-Pond
 
