@@ -31,14 +31,12 @@ export const MachineFish = {
       return state
     },
   }),
-  registry: (): Fish<string[], Event> => ({
+  registry: (): Fish<Record<string, boolean>, Event> => ({
     fishId: FishId.of('machineReg', 'reg', 0),
-    initialState: [],
+    initialState: {},
     where: machineTag,
     onEvent: (state, event) => {
-      if (!state.includes(event.machineId)) {
-        state.push(event.machineId)
-      }
+      state[event.machineId] = true
       return state
     },
   }),

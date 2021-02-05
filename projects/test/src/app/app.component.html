@@ -2,15 +2,25 @@
 <div *ngIf="connectivity$ | async as connectivity">
   <h2>Connectivity: {{connectivity.status | json}}</h2>
 </div>
-<div *ngIf="machine$ | async as machine; else loading">
-  <div>
-    <h2>Machine {{machine.machineId}}</h2>
+<hr />
+<div>
+  <h2>Machine1</h2>
+  <div *ngIf="machine$ | async as machine; else loading">
     <dl>
       <dt>state:</dt>
       <dd>{{machine.state}}</dd>
     </dl>
+    <button *ngIf="machine.state==='idle'" (click)="start()">start</button>
+    <button *ngIf="machine.state==='inProduction'" (click)="stop()">stop</button>
   </div>
-  <button *ngIf="machine.state==='stopped'" (click)="start()">start</button>
-  <button *ngIf="machine.state==='started'" (click)="stop()">stop</button>
+  <hr />
+  <div *ngFor="let machine of (allMachines$ | async)">
+    <dl>
+      <dt>Name:</dt>
+      <dd>{{machine.machineId}}</dd>
+      <dt>State:</dt>
+      <dd>{{machine.state}}</dd>
+    </dl>
+  </div>
 </div>
 <ng-template #loading>Loading machine data...</ng-template>

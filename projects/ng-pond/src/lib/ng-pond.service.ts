@@ -102,8 +102,8 @@ export class ActyxPondService {
    *                       (the last array of states is buffered and immediately supplied to new subscribers.)
    */
   observeRegistry$<RegS, P, S>(
-    registryFish: Fish<any, RegS>,
-    mapToProperty: (regState: RegS) => ReadonlyArray<P | undefined>,
+    registryFish: Fish<RegS, any>,
+    mapToProperty: (prop: RegS) => ReadonlyArray<P | undefined>,
     makeEntityFish: (seedEvent: P) => Fish<S, any>,
   ): Observable<S[]> {
     return from(this.getRxPond()).pipe(
@@ -137,9 +137,9 @@ export class ActyxPondService {
    * @returns              A function that can be called in order to cancel the subscription
    */
   observeRegistry<RegS, P, S>(
-    registryFish: Fish<any, RegS>,
+    registryFish: Fish<RegS, any>,
     mapToProperty: (regState: RegS) => ReadonlyArray<P | undefined>,
-    makeEntityFish: (seedEvent: P) => Fish<S, any>,
+    makeEntityFish: (prop: P) => Fish<S, any>,
     onStateChanged: (states: S[]) => void
   ): CancelSubscription {
     return this.observeRegistry$(registryFish, mapToProperty, makeEntityFish)

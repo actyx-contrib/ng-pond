@@ -37,6 +37,8 @@ export class AppModule {}
 
 Use the simple pond api in your components as with callbacks or with rxjs observables. This will give you the opportunity to use your fish states in the code or use `async` pipelines to build reactive and state of the art user interfaces.
 
+> **Note**: It is highly recommended to build applications in  *separation of concerns* [(SoC)](https://en.wikipedia.org/wiki/Separation_of_concerns). Using the `PondService` directly in the components makes it harder to maintain your project and write e2e and unit tests for your components.
+
 #### 📖 Example:
 
 ##### Logic:
@@ -136,17 +138,6 @@ export const MachineFish = {
       return state
     },
   }),
-  registry: (): Fish<string[], Event> => ({
-    fishId: FishId.of('machineRegFish', 'reg', 0),
-    initialState: [],
-    where: machineTag,
-    onEvent: (state, event) => {
-      if (!state.includes(event.machineId)) {
-        state.push(event.machineId)
-      }
-      return state
-    },
-  }),
   emitProdStoppedEvent: (pond: Pond, machineId: string, orderId: string) =>
     pond.emit(
       machineTag.withId(machineId),
@@ -161,11 +152,75 @@ export const MachineFish = {
 
 ```
 
+### Registry fish
+
+In the pond, there are two ways to create registry fish. `observeAll` and `observe` a registry fish and map the entity fish as a second step. In the matter that `observeAll` is pretty strate forward, here is an example for the registry fish.
+
+#### 📖 Example:
+
+> **Note**: This example is build on top of the `Use the pond api` example above.
+
+##### Logic:
+
+File: `app.component.ts`
+
+```typescript
+// [..]
+  allMachines$: Observable<ReadonlyArray<State>>
+
+  constructor(private pondService: ActyxPondService) {
+    this.machine$ = this.pondService.observe$(MachineFish.of('Machine1'))
+    this.allMachine$ = this.pondService.observeRegistry$(MachineFish.registry(), s => s, MachineFish.of)
+    this.connectivity$ = this.pondService.getNodeConnectivity$()
+  }
+// [..]
+}
+```
+
+##### Template:
+
+File: `app.component.html`
+
+```html
+<!-- [..] -->
+<div *ngFor="let machine of (allMachines$ | async)">
+  <dl>
+    <dt>Name:</dt>
+    <dd>{{machine.machineId}}</dd>
+    <dt>State:</dt>
+    <dd>{{machine.state}}</dd>
+  </dl>
+</div>
+<!-- [..] -->
+```
+
+##### 🐟 Fish
+
+File: `MachineFish.ts`
+
+```typescript
+export const MachineFish = {
+  // [..]
+  registry: (): Fish<string[], Event> => ({
+    fishId: FishId.of('machineRegFish', 'reg', 0),
+    initialState: [],
+    where: machineTag,
+    onEvent: (state, event) => {
+      if (!state.includes(event.machineId)) {
+        state.push(event.machineId)
+      }
+      return state
+    },
+  }),
+  // [..]
+```
+
+
 ## 📖 Service overview
 
 > Check out the documentation about the Actyx-Pond to get more detailed information https://developer.actyx.com/docs/pond/introduction/
 
-You are going to finde a documentation in the definition file of the package.
+You are going to find a detailed api documentation in the definition file of the package.
 
 ### TS/JS Promise interface:
 
