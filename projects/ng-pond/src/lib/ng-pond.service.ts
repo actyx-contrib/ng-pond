@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CancelSubscription, Fish, ObserveAllOpts, PendingEmission, Pond, PondInfo, PondState, StateEffect, Tags, Where } from '@actyx/pond'
 import { RxPond } from '@actyx-contrib/rx-pond'
-import { combineLatest, from, Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import * as Registry from '@actyx-contrib/registry';
 
 @Injectable({
   providedIn: 'root',
@@ -106,19 +107,7 @@ export class ActyxPondService {
     mapToProperty: (prop: RegS) => ReadonlyArray<P | undefined>,
     makeEntityFish: (seedEvent: P) => Fish<S, any>,
   ): Observable<S[]> {
-    return from(this.getRxPond()).pipe(
-      switchMap(pond => pond.observe(registryFish)
-        .pipe(
-          map(mapToProperty),
-          map((props): ReadonlyArray<P> => props.filter((p): p is P => p !== undefined)),
-          switchMap(regState =>
-            regState.length === 0
-              ? of<S[]>([])
-              : combineLatest(regState.map(prop => pond.observe(makeEntityFish(prop))))
-          )
-        )
-      )
-    )
+    return from(this.getRxPond()).pipe(switchMap(rxP => Registry.observeRegistry$(rxP, registryFish, mapToProperty, makeEntityFish)))
   }
   /**
    * Use your complex registry fish to get the state of the required entities.
