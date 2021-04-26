@@ -1,16 +1,15 @@
 {
   "name": "@actyx-contrib/ng-pond",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "peerDependencies": {
     "@angular/common": "^11.0.5",
     "@angular/core": "^11.0.5",
-    "rxjs": "~6.4",
-    "@actyx-contrib/rx-pond": "^0.2",
-    "@actyx/pond": "^2"
+    "rxjs": "~6.4"
   },
   "dependencies": {
     "tslib": "^2.0.0",
     "@actyx-contrib/rx-pond": "^0.2",
+    "@actyx-contrib/registry": "^2.0",
     "@actyx/pond": "^2"
   }
 }
