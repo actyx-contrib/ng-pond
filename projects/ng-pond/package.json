@@ -1,6 +1,7 @@
 {
   "name": "@actyx-contrib/ng-pond",
-  "version": "0.2.2",
+  "description": "Use the Actyx Pond framework integrated as a service in your angular application",
+  "version": "0.2.3",
   "peerDependencies": {
     "@angular/common": "^11.0.5",
     "@angular/core": "^11.0.5",

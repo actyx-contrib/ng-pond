@@ -2,7 +2,7 @@
 
 # ng-Pond
 
-Use the Actyx Pond framework integrated as service in your angular application. Expand your toolchain with the `ActyxPondService` to observe fish all over your application and speed up your UI projects and write distributed apps in a couple of hours.
+Use the Actyx Pond framework integrated as a service in your angular application. Expand your toolchain with the `ActyxPondService` to observe fish all over your application and speed up your UI projects and write distributed apps in a couple of hours.
 
 ## 📦 Installation
 
