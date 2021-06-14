@@ -215,6 +215,38 @@ export const MachineFish = {
   // [..]
 ```
 
+#### 📖 Example: Configure Pond Options
+
+This example shows how to configure the pond's options.
+We add a `fishErrorReporter` and a `defaultSnapshotThreshold`.
+For details and additional options, please refer to the `PondOptions` reference in the developer documentation at https://developer.actyx.com/.
+
+```typescript
+import { AppComponent } from './app.component';
+import { ActyxPondService } from '@actyx-contrib/ng-pond'
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  providers: [
+    {
+      provide: 'pondOptions',
+      useValue: {
+        defaultSnapshotThreshold: 42,
+        fishErrorReporter: (
+          err: unknown,
+          fishId: FishId,
+          detail: FishErrorContext
+        ) => console.error(err, fishId, detail),
+      },
+    },
+    ActyxPondService
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
+
 
 ## 📖 Service overview
 
