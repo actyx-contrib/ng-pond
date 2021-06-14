@@ -223,6 +223,7 @@ For details and additional options, please refer to the `PondOptions` reference 
 
 ```typescript
 import { AppComponent } from './app.component';
+import { FishErrorContext, FishId } from '@actyx/pond';
 import { ActyxPondService } from '@actyx-contrib/ng-pond'
 
 @NgModule({
