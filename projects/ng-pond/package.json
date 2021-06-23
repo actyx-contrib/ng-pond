@@ -11,6 +11,6 @@
     "tslib": "^2.0.0",
     "@actyx-contrib/rx-pond": "^0.2",
     "@actyx-contrib/registry": "^2.0",
-    "@actyx/pond": "^2"
+    "@actyx/pond": "^3"
   }
 }
