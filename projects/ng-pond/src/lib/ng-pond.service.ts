@@ -1,5 +1,5 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { ActyxOpts, AppManifest, CancelSubscription, Fish, ObserveAllOpts, PendingEmission, Pond, PondInfo, PondOptions, PondState, StateEffect, Tags, Where } from '@actyx/pond'
+import { ActyxOpts, AppManifest, CancelSubscription, Fish, ObserveAllOpts, PendingCommand, PendingEmission, Pond, PondInfo, PondOptions, PondState, StateEffect, Tags, Where } from '@actyx/pond'
 import { RxPond } from '@actyx-contrib/rx-pond'
 import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -296,7 +296,7 @@ export class ActyxPondService {
    * @param effect     - Function to enqueue new events based on state.
    * @returns            A `PendingEmission` object that can be used to register callbacks with the effect’s completion.
    */
-  run<S, EWrite>(fish: Fish<S, any>, fn: StateEffect<S, EWrite>): Promise<PendingEmission> {
+  run<S, EWrite>(fish: Fish<S, any>, fn: StateEffect<S, EWrite>): Promise<PendingEmission | PendingCommand> {
     return this.getPond().then(pond => pond.run(fish, fn))
   }
   /**
