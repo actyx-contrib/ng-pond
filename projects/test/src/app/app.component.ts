@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActyxPondService } from '../../../../dist/ng-pond'
 import { Observable } from 'rxjs';
-import { ConnectivityStatus } from '@actyx/pond';
 import { MachineService, MachineState } from './machine.service';
 
 @Component({
@@ -9,12 +8,10 @@ import { MachineService, MachineState } from './machine.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  connectivity$: Observable<ConnectivityStatus>
   machine$: Observable<MachineState>
   allMachines$: Observable<ReadonlyArray<MachineState>>
 
   constructor(pondService: ActyxPondService, private machine: MachineService) {
-    this.connectivity$ = pondService.getNodeConnectivity$()
     this.machine$ = machine.observeMachine('Machine1')
     this.allMachines$ = machine.getAllMachines()
   }

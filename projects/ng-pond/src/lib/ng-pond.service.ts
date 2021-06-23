@@ -12,9 +12,9 @@ export class ActyxPondService {
   pond: Pond | undefined
   rxPond: RxPond | undefined
   constructor(
-    @Inject('manifest') @Optional() manifest?: AppManifest, 
-    @Inject('connectionOpts') @Optional() connectionOpts?: ActyxOpts, 
-    @Inject('pondOpts') @Optional() opts?: PondOptions) {
+    @Inject('actyxAppManifest') @Optional() manifest?: AppManifest, 
+    @Inject('actyxConnectionOpts') @Optional() connectionOpts?: ActyxOpts, 
+    @Inject('actyxPondOpts') @Optional() opts?: PondOptions) {
     const sv = this
     const defaultManifest: AppManifest = {
       appId: 'com.example.ng-pond-example',
@@ -266,12 +266,6 @@ export class ActyxPondService {
    */
   getPondState$() {
     return from(this.getRxPond()).pipe(switchMap(rxP => rxP.getPondState()))
-  }
-  /**
-   * Get an Observable of this node’s connectivity information. Updates periodically.
-   */
-  getNodeConnectivity$() {
-    return from(this.getRxPond()).pipe(switchMap(rxP => rxP.getNodeConnectivity()))
   }
   /**
    * Wait for the node to get in sync with the swarm.
