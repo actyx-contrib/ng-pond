@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "tslib": "^2.0.0",
-    "@actyx-contrib/rx-pond": "^0.2",
-    "@actyx-contrib/registry": "^2.0",
+    "@actyx-contrib/rx-pond": "^0.4.0",
+    "@actyx-contrib/registry": "^3.0.0",
     "@actyx/pond": "^3"
   }
 }
