@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { CancelSubscription, Fish, ObserveAllOpts, PendingEmission, Pond, PondInfo, PondState, StateEffect, Tags, Where } from '@actyx/pond'
+import { Inject, Injectable, Optional } from '@angular/core';
+import { CancelSubscription, Fish, ObserveAllOpts, PendingEmission, Pond, PondInfo, PondOptions, PondState, StateEffect, Tags, Where } from '@actyx/pond'
 import { RxPond } from '@actyx-contrib/rx-pond'
 import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -11,9 +11,9 @@ import * as Registry from '@actyx-contrib/registry';
 export class ActyxPondService {
   pond: Pond | undefined
   rxPond: RxPond | undefined
-  constructor() {
+  constructor(@Inject('pondOptions') @Optional() pondOptions?: PondOptions) {
     const sv = this
-    Pond.default().then(pond => {
+    Pond.of({}, pondOptions || {}).then(pond => {
       sv.pond = pond
       sv.rxPond = RxPond.from(pond)
     })
