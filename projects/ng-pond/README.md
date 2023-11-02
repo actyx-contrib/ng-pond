@@ -50,7 +50,6 @@ import { Component } from '@angular/core';
 import { ActyxPondService } from '@actyx-contrib/ng-pond'
 import { MachineFish, State } from '../fish/MachineFish';
 import { Observable } from 'rxjs';
-import { ConnectivityStatus } from '@actyx/pond';
 
 @Component({
   selector: 'app-root',
@@ -58,11 +57,9 @@ import { ConnectivityStatus } from '@actyx/pond';
 })
 export class AppComponent {
   machine$: Observable<State>
-  connectivity$: Observable<ConnectivityStatus>
 
   constructor(private pondService: ActyxPondService) {
     this.machine$ = this.pondService.observe$(MachineFish.of('Machine1'))
-    this.connectivity$ = this.pondService.getNodeConnectivity$()
   }
 
   async start() {
@@ -83,9 +80,6 @@ File: `app.component.html`
 
 ```html
 <h1>Angular - Actyx-Pond - Machine control</h1>
-<div *ngIf="connectivity$ | async as connectivity">
-  <h2>Connectivity: {{connectivity.status | json}}</h2>
-</div>
 <div *ngIf="machine$ | async as machine; else loading">
   <div>
     <h2>Machine {{machine.machineId}}</h2>
@@ -213,6 +207,54 @@ export const MachineFish = {
     },
   }),
   // [..]
+```
+
+#### 📖 Example: Configure Pond Options
+
+This example shows how to configure the pond's options.
+
+For details and additional options, please refer to the `PondOptions`, `ActyxOpts` and `AppManifest` reference in the developer documentation at https://developer.actyx.com/.
+
+```typescript
+import { AppComponent } from './app.component';
+import { FishErrorContext, FishId } from '@actyx/pond';
+import { ActyxPondService } from '@actyx-contrib/ng-pond'
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  providers: [
+    {
+      provide: 'actyxConnectionOpts',
+      useValue: {
+        actyxHost: 'actyx-host',
+        actyxPort: 42,
+        onConnectionLost: () => { console.error('connection lost') }
+      },
+    },
+    {
+      provide: 'actyxAppManifest',
+      useValue: {
+        appId: 'com.example.foo',
+        displayName: 'Foo',
+        version: '0.0.42'
+      },
+    },
+    {
+      provide: 'actyxPondOpts',
+      useValue: {
+        fishErrorReporter: (
+          err: unknown,
+          fishId: FishId,
+          detail: FishErrorContext
+        ) => console.error(err, fishId, detail),
+      },
+    }m
+    ActyxPondService
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
 ```
 
 

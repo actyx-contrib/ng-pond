@@ -54,7 +54,6 @@ import { Component } from '@angular/core';
 import { ActyxPondService } from '@actyx-contrib/ng-pond'
 import { MachineFish, State } from '../fish/MachineFish';
 import { Observable } from 'rxjs';
-import { ConnectivityStatus } from '@actyx/pond';
 
 @Component({
   selector: 'app-root',
@@ -62,11 +61,9 @@ import { ConnectivityStatus } from '@actyx/pond';
 })
 export class AppComponent {
   machine$: Observable<State>
-  connectivity$: Observable<ConnectivityStatus>
 
   constructor(private pondService: ActyxPondService) {
     this.machine$ = this.pondService.observe$(MachineFish.of('Machine1'))
-    this.connectivity$ = this.pondService.getNodeConnectivity$()
   }
 
   async start() {
@@ -87,9 +84,6 @@ File: `app.component.html`
 
 ```html
 <h1>Angular - Actyx-Pond - Machine control</h1>
-<div *ngIf="connectivity$ | async as connectivity">
-  <h2>Connectivity: {{connectivity.status | json}}</h2>
-</div>
 <div *ngIf="machine$ | async as machine; else loading">
   <div>
     <h2>Machine {{machine.machineId}}</h2>

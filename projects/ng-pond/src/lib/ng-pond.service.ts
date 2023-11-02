@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { CancelSubscription, Fish, ObserveAllOpts, PendingEmission, Pond, PondInfo, PondState, StateEffect, Tags, Where } from '@actyx/pond'
+import { Inject, Injectable, Optional } from '@angular/core';
+import { ActyxOpts, AppManifest, CancelSubscription, Fish, ObserveAllOpts, PendingCommand, PendingEmission, Pond, PondInfo, PondOptions, PondState, StateEffect, Tags, Where } from '@actyx/pond'
 import { RxPond } from '@actyx-contrib/rx-pond'
 import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -11,12 +11,24 @@ import * as Registry from '@actyx-contrib/registry';
 export class ActyxPondService {
   pond: Pond | undefined
   rxPond: RxPond | undefined
-  constructor() {
+  constructor(
+    @Inject('actyxAppManifest') @Optional() manifest?: AppManifest, 
+    @Inject('actyxConnectionOpts') @Optional() connectionOpts?: ActyxOpts, 
+    @Inject('actyxPondOpts') @Optional() opts?: PondOptions) {
     const sv = this
-    Pond.default().then(pond => {
-      sv.pond = pond
-      sv.rxPond = RxPond.from(pond)
-    })
+    const defaultManifest: AppManifest = {
+      appId: 'com.example.ng-pond-example',
+      displayName: 'Angular Pond Example',
+      version: '0.0.1'
+    }
+    Pond.of(
+      manifest || defaultManifest,
+      connectionOpts || {},
+      opts || {}).
+      then(pond => {
+        sv.pond = pond
+        sv.rxPond = RxPond.from(pond)
+      })
   }
 
   /**
@@ -256,12 +268,6 @@ export class ActyxPondService {
     return from(this.getRxPond()).pipe(switchMap(rxP => rxP.getPondState()))
   }
   /**
-   * Get an Observable of this node’s connectivity information. Updates periodically.
-   */
-  getNodeConnectivity$() {
-    return from(this.getRxPond()).pipe(switchMap(rxP => rxP.getNodeConnectivity()))
-  }
-  /**
    * Wait for the node to get in sync with the swarm.
    * It is strongly recommended that any interaction with the Pond is delayed until the Observable.
    * To obtain progress information about the sync, look at the intermediate values emitted by the Observable.
@@ -284,7 +290,7 @@ export class ActyxPondService {
    * @param effect     - Function to enqueue new events based on state.
    * @returns            A `PendingEmission` object that can be used to register callbacks with the effect’s completion.
    */
-  run<S, EWrite>(fish: Fish<S, any>, fn: StateEffect<S, EWrite>): Promise<PendingEmission> {
+  run<S, EWrite>(fish: Fish<S, any>, fn: StateEffect<S, EWrite>): Promise<PendingEmission | PendingCommand> {
     return this.getPond().then(pond => pond.run(fish, fn))
   }
   /**
